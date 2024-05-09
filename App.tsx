@@ -7,9 +7,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './src/screens/HomeScreen';
 import MatchScreen from './src/screens/MatchScreen';
+import { Amplify } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react-native';
+import config from './src/aws-exports';
+import ProfileScreen from './src/screens/ProfileScreen';
+import { useEffect } from 'react';
+//import { DataStore } from 'aws-amplify/datastore';
+//import { Hub, ConsoleLogger } from 'aws-amplify/utils'
+import './src/models';
+
+Amplify.configure(config);
 
 
 const App = () => {
+
   const [activeScreen, setActiveScreen] = useState('HOME')
 
   const activeColor = '#F76C6B';
@@ -30,11 +41,14 @@ const App = () => {
             <Ionicons name="ios-chatbubbles" size={30} color={activeScreen == 'CHAT' ? activeColor : color} />
           </Pressable>
 
-          <FontAwesome name="user" size={30} color={color} />
+          <Pressable onPress={() => setActiveScreen('PROFILE')}>
+            <FontAwesome name="user" size={30} color={activeScreen == 'PROFILE' ? activeColor : color} />
+          </Pressable>
 
         </View>
         {activeScreen == 'HOME' && <HomeScreen />}
         {activeScreen == 'CHAT' && <MatchScreen />}
+        {activeScreen == 'PROFILE' && <ProfileScreen />}
       </View>
     </SafeAreaView>
   );
@@ -57,4 +71,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default App;
+export default withAuthenticator(App);
